@@ -29,7 +29,6 @@
 (setq custom-file (concat dotfiles-dir "custom.el"))
 
 ;; Detect online status, from ESK
-
 (require 'cl)
 (defun esk-online? ()
   (if (and (functionp 'network-interface-list)
@@ -62,9 +61,13 @@
 
 ;; Define subpackages
 (setq packages
-      '(theme
+      '(defuns
+	theme
 	vim
-	git))
+	git
+	lisp
+	parens
+	complete))
 
 ;; Now load other things
 (dolist (file packages)
