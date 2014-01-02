@@ -1,0 +1,37 @@
+;; -*- lexical-binding: t -*-
+
+;; Set C-u to scroll up (must be before require evil)
+(setq evil-want-C-u-scroll t)
+
+(package-require 'evil)
+(evil-mode 1)
+
+(setq evil-motion-state-modes (append evil-emacs-state-modes evil-motion-state-modes))
+(setq evil-emacs-state-modes nil)
+
+(defun move-key (keymap-from keymap-to key)
+  "Moves key binding from one keymap to another, deleting from the old location. "
+  (define-key keymap-to key (lookup-key keymap-from key))
+  (define-key keymap-from key nil))
+
+(move-key evil-motion-state-map evil-normal-state-map (kbd "<SPC>"))
+(move-key evil-motion-state-map evil-normal-state-map (kbd "<RET>"))
+
+;; Note: lexical-binding must be t in order for this to work correctly.
+(defun make-conditional-key-translation (key-from key-to translate-keys-p)
+  "Make a Key Translation such that if the translate-keys-p function returns true, key-from translates to key-to, else key-from translates to itself. translate-keys-p takes key-from as an argument. "
+  (define-key key-translation-map key-from
+    (lambda (prompt)
+      (if (funcall translate-keys-p key-from) key-to key-from))))
+
+(defun translate-keys-p (key-from)
+  "Returns whether conditional key translations should be active. See make-conditional-key-translation function. "
+  (and ;; Only allow a non identity translation if we're beginning a Key Sequence.
+   (equal key-from (this-command-keys))
+   (or (evil-motion-state-p) (evil-normal-state-p) (evil-visual-state-p))))
+
+(define-key evil-normal-state-map (kbd "<SPC>") nil)
+(make-conditional-key-translation (kbd "<SPC>") (kbd "C-x") 'translate-keys-p)
+(make-conditional-key-translation (kbd "C-<SPC>") (kbd "M-x") 'translate-keys-p)
+
+(provide 'vim)
