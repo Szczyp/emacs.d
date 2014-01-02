@@ -2,12 +2,11 @@
 
 (require 'defuns)
 
-(setq bodil-lisp-modes
-      '(scheme-mode emacs-lisp-mode lisp-mode clojure-mode
-                    lolisp-mode shen-mode bodol-mode))
+(setq lisp-modes
+      '(scheme-mode emacs-lisp-mode lisp-mode clojure-mode shen-mode))
 
 (defun add-lisp-hook (func)
-  (add-hooks bodil-lisp-modes func))
+  (add-hooks lisp-modes func))
 
 ;; Setup C-c v to eval whole buffer in all lisps
 (define-key lisp-mode-shared-map (kbd "C-c v") 'eval-buffer)
@@ -24,7 +23,6 @@
                                      "λ" 'decompose-region)))))))
 
 ;;; Emacs Lisp
-
 (lambda-as-lambda 'emacs-lisp-mode "(\\(\\<lambda\\>\\)")
 
 (defun remove-elc-on-save ()
@@ -37,21 +35,27 @@
 
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 (add-hook 'emacs-lisp-mode-hook 'remove-elc-on-save)
-
-(define-key emacs-lisp-mode-map (kbd "M-.") 'find-function-at-point)
+(add-hook 'emacs-lisp-mode-hook
+	  (lambda () (rebind-evil-tag-navigation emacs-lisp-mode-map 'find-function-at-point nil)))
 
 ;;; Clojure
-
 (package-require 'clojure-mode)
 (add-to-list 'auto-mode-alist '("\\.cljs?$" . clojure-mode))
 
 (lambda-as-lambda 'clojure-mode "(\\(\\<fn\\>\\)")
 
-;; nRepl
+;; Cider
 (package-require 'cider)
 (eval-after-load "clojure-mode" '(require 'cider))
-(setq nrepl-lein-command "lein")
-(setq nrepl-server-command "echo \"lein repl :headless\" | $SHELL -l")
+
+(setq nrepl-hide-special-buffers t)
+(setq cider-repl-pop-to-buffer-on-connect nil)
+
+(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+(add-hook 'cider-mode-hook
+	  (lambda () (rebind-evil-tag-navigation clojure-mode-map 'cider-jump 'cider-jump-back)))
+(add-hook 'cider-repl-mode-hook 'paredit-mode)
+(add-hook 'cider-repl-mode-hook 'rainbow-mode)
 
 ;; Run tests in nRepl
 (defun nrepl-run-tests (ns)
@@ -81,7 +85,6 @@ Display the results in a hyperlinked *compilation* buffer."
 (package-require 'cljsbuild-mode)
 
 ;;; Shen
-
 (package-require 'shen-mode)
 (add-to-list 'auto-mode-alist '("\\.shen$" . shen-mode))
 (eval-after-load "shen-mode"
@@ -117,7 +120,6 @@ Display the results in a hyperlinked *compilation* buffer."
   (run-lisp "shen"))
 
 ;; Switch a Clojure nrepl to ClojureScript
-
 (defun nrepl-start-noderepl ()
   (interactive)
   (save-excursion

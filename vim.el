@@ -34,4 +34,11 @@
 (make-conditional-key-translation (kbd "<SPC>") (kbd "C-x") 'translate-keys-p)
 (make-conditional-key-translation (kbd "C-<SPC>") (kbd "M-x") 'translate-keys-p)
 
+;; Add to mode hooks when rebinding these
+(defun rebind-evil-tag-navigation (map jump jump-back)
+  (define-key evil-motion-state-map (kbd "C-]") nil)
+  (define-key map (kbd "C-]") jump)
+  (define-key evil-motion-state-map (kbd "C-t") nil)
+  (define-key map (kbd "C-t") jump-back))
+
 (provide 'vim)
