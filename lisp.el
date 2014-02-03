@@ -9,7 +9,7 @@
   (add-hooks lisp-modes func))
 
 ;; Setup C-c v to eval whole buffer in all lisps
-(define-key lisp-mode-shared-map (kbd "C-c v") 'eval-buffer)
+(define-key lisp-mode-shared-map (kbd "C-c <RET>") 'eval-buffer)
 
 ;; Highlight sexp under cursor
 (package-require 'highlight-parentheses)
@@ -118,13 +118,5 @@ Display the results in a hyperlinked *compilation* buffer."
 (defun shen-repl ()
   (interactive)
   (run-lisp "shen"))
-
-;; Switch a Clojure nrepl to ClojureScript
-(defun nrepl-start-noderepl ()
-  (interactive)
-  (save-excursion
-    (nrepl-switch-to-repl-buffer nil)
-    (insert "(require 'cljs.repl.node) (cljs.repl.node/run-node-nrepl)")
-    (nrepl-send-input)))
 
 (provide 'lisp)
