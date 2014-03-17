@@ -66,6 +66,7 @@
 	vim
 	git
 	lisp
+	haskell
 	parens
 	complete))
 
@@ -73,5 +74,4 @@
 (dolist (file packages)
   (require file))
 
-;; Load custom settings
-(load custom-file 'noerror)
+(shell)

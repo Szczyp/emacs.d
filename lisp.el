@@ -3,12 +3,12 @@
 (require 'defuns)
 
 (setq lisp-modes
-      '(scheme-mode emacs-lisp-mode lisp-mode clojure-mode shen-mode))
+      '(scheme-mode emacs-lisp-mode lisp-mode clojure-mode))
 
 (defun add-lisp-hook (func)
   (add-hooks lisp-modes func))
 
-;; Setup C-c v to eval whole buffer in all lisps
+(define-key lisp-mode-shared-map (kbd "C-c <SPC>") 'eval-defun)
 (define-key lisp-mode-shared-map (kbd "C-c <RET>") 'eval-buffer)
 
 ;; Highlight sexp under cursor
@@ -51,23 +51,26 @@
 (setq nrepl-hide-special-buffers t)
 (setq cider-repl-pop-to-buffer-on-connect nil)
 
-(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+(defun cider-eval-defun-at-point-or-region ()
+  (interactive)
+  (if (use-region-p)
+      (cider-eval-region (region-beginning) (region-end))
+    (cider-eval-defun-at-point)))
+
+(add-hook 'clojure-mode-hook
+	  (lambda () (progn
+		  (define-key clojure-mode-map (kbd "C-c j") 'cider-jack-in))))
+
 (add-hook 'cider-mode-hook
-	  (lambda () (rebind-evil-tag-navigation clojure-mode-map 'cider-jump 'cider-jump-back)))
+	  (lambda () (progn
+		  (cider-turn-on-eldoc-mode)
+		  (rebind-evil-tag-navigation cider-mode-map 'cider-jump 'cider-jump-back)
+		  (define-key cider-mode-map (kbd "C-c q") 'cider-quit)
+		  (define-key cider-mode-map (kbd "C-c <RET>") 'cider-eval-buffer)
+		  (define-key cider-mode-map (kbd "C-c <SPC>") 'cider-eval-defun-at-point-or-region))))
+
 (add-hook 'cider-repl-mode-hook 'paredit-mode)
 (add-hook 'cider-repl-mode-hook 'rainbow-mode)
-
-;; Run tests in nRepl
-(defun nrepl-run-tests (ns)
-  (interactive (list (nrepl-current-ns)))
-  (save-buffer)
-  (nrepl-load-current-buffer)
-  (with-current-buffer "*nrepl*"
-    (nrepl-send-string
-     (format "(clojure.test/run-tests '%s)" ns)
-     nrepl-buffer-ns (nrepl-handler (current-buffer)))))
-(eval-after-load "clojure-mode"
-  '(define-key clojure-mode-map (kbd "C-c C-,") 'nrepl-run-tests))
 
 ;;Kibit
 (require 'compile)
@@ -83,19 +86,6 @@ Display the results in a hyperlinked *compilation* buffer."
 
 ;; Cljsbuild
 (package-require 'cljsbuild-mode)
-
-;;; Shen
-(package-require 'shen-mode)
-(add-to-list 'auto-mode-alist '("\\.shen$" . shen-mode))
-(eval-after-load "shen-mode"
-  '(progn
-     (define-key shen-mode-map (kbd "C-x C-e") 'lisp-eval-last-sexp)
-     (define-key shen-mode-map (kbd "C-c C-k")
-       (lambda ()
-         (interactive)
-         (lisp-eval-string (buffer-string))))))
-(lambda-as-lambda 'shen-mode "(\\(\\</\\.\\>\\)")
-
 
 ;;; Various inferior lisps
 
@@ -113,10 +103,5 @@ Display the results in a hyperlinked *compilation* buffer."
 (defun clojurescript-rhino-repl ()
   (interactive)
   (run-lisp "lein trampoline cljsbuild repl-rhino"))
-
-;; Shen REPL
-(defun shen-repl ()
-  (interactive)
-  (run-lisp "shen"))
 
 (provide 'lisp)
