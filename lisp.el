@@ -87,21 +87,4 @@ Display the results in a hyperlinked *compilation* buffer."
 ;; Cljsbuild
 (package-require 'cljsbuild-mode)
 
-;;; Various inferior lisps
-
-;; Clojure REPL
-(defun clojure-repl ()
-  (interactive)
-  (run-lisp "lein repl"))
-
-;; ClojureScript REPL
-(defun clojurescript-repl ()
-  (interactive)
-  (run-lisp "lein trampoline noderepl"))
-
-;; ClojureScript REPL
-(defun clojurescript-rhino-repl ()
-  (interactive)
-  (run-lisp "lein trampoline cljsbuild repl-rhino"))
-
 (provide 'lisp)
