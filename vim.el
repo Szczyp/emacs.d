@@ -32,6 +32,8 @@
    (equal key-from (this-command-keys))
    (or (evil-motion-state-p) (evil-normal-state-p) (evil-visual-state-p))))
 
+(define-key evil-motion-state-map (kbd "C-i") 'evil-jump-forward)
+
 (define-key evil-normal-state-map (kbd "<SPC>") nil)
 (define-key evil-normal-state-map (kbd "<RET>") nil)
 (define-key evil-normal-state-map (kbd "TAB") nil)
