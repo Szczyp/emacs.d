@@ -63,6 +63,7 @@
 (setq packages
       '(defuns
 	theme
+	global
 	vim
 	git
 	lisp
