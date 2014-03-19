@@ -32,7 +32,10 @@
    (equal key-from (this-command-keys))
    (or (evil-motion-state-p) (evil-normal-state-p) (evil-visual-state-p))))
 
-(define-key evil-motion-state-map (kbd "C-i") 'evil-jump-forward)
+;; Translate the problematic keys to the function key Hyper:
+(keyboard-translate ?\C-i ?\H-i)
+;; Rebind then accordantly: 
+(define-key evil-motion-state-map (kbd "H-i") 'evil-jump-forward)
 
 (define-key evil-normal-state-map (kbd "<SPC>") nil)
 (define-key evil-normal-state-map (kbd "<RET>") nil)
