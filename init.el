@@ -63,6 +63,7 @@
 (setq packages
       '(defuns
 	theme
+	unicode
 	global
 	vim
 	git

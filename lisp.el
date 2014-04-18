@@ -15,15 +15,9 @@
 (package-require 'highlight-parentheses)
 (add-lisp-hook 'highlight-parentheses-mode)
 
-;; Lambdas
-(defun lambda-as-lambda (mode pattern)
-  (font-lock-add-keywords
-   mode `((,pattern
-           (0 (progn (compose-region (match-beginning 1) (match-end 1)
-                                     "λ" 'decompose-region)))))))
-
 ;;; Emacs Lisp
-(lambda-as-lambda 'emacs-lisp-mode "(\\(\\<lambda\\>\\)")
+(substitute-unicode 'emacs-lisp-mode
+		    (list (cons "(\\(\\<lambda\\>\\)" 'lambda)))
 
 (defun remove-elc-on-save ()
   "If you're saving an elisp file, likely the .elc is no longer valid."
@@ -42,7 +36,13 @@
 (package-require 'clojure-mode)
 (add-to-list 'auto-mode-alist '("\\.cljs?$" . clojure-mode))
 
-(lambda-as-lambda 'clojure-mode "(\\(\\<fn\\>\\)")
+(substitute-unicode 'clojure-mode
+		    (list (cons "(\\(\\<fn\\>\\)" 'lambda)
+			  (cons "(\\(\\<comp\\>\\)" 'composition)
+			  (cons "(\\(\\<apply\\>\\)" 'application)
+			  (cons "(\\(\\<partial\\>\\)" 'partial-application)
+			  (cons "\\(#\\){" 'set)
+			  (cons "\\(#\\)(" 'f)))
 
 ;; Cider
 (package-require 'cider)
@@ -57,15 +57,20 @@
       (cider-eval-region (region-beginning) (region-end))
     (cider-eval-defun-at-point)))
 
+(defun spawn-chrome ()
+  (interactive)
+  (start-process "chrome" nil "chromium" "localhost:8080"))
+
 (add-hook 'clojure-mode-hook
 	  (lambda () (progn
-		  (define-key clojure-mode-map (kbd "C-c j") 'cider-jack-in))))
+		  (define-key clojure-mode-map (kbd "C-c j") 'cider-jack-in)
+		  (define-key clojure-mode-map (kbd "C-c b") 'spawn-chrome))))
 
 (add-hook 'cider-mode-hook
 	  (lambda () (progn
 		  (cider-turn-on-eldoc-mode)
 		  (rebind-evil-tag-navigation cider-mode-map 'cider-jump 'cider-jump-back)
-		  (define-key cider-mode-map (kbd "C-c q") 'cider-quit)
+		  (define-key cider-mode-map (kbd "C-c r") 'cider-restart)
 		  (define-key cider-mode-map (kbd "C-c <RET>") 'cider-eval-buffer)
 		  (define-key cider-mode-map (kbd "C-c <SPC>") 'cider-eval-defun-at-point-or-region))))
 
