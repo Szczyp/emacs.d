@@ -37,10 +37,10 @@
 (add-to-list 'auto-mode-alist '("\\.cljs?$" . clojure-mode))
 
 (substitute-unicode 'clojure-mode
-		    (list (cons "(\\(\\<fn\\>\\)" 'lambda)
-			  (cons "(\\(\\<comp\\>\\)" 'composition)
-			  (cons "(\\(\\<apply\\>\\)" 'application)
-			  (cons "(\\(\\<partial\\>\\)" 'partial-application)
+		    (list (cons "\\b\\(\\<fn\\>\\)\\b" 'lambda)
+			  (cons "\\b\\(\\<comp\\>\\)\\b" 'composition)
+			  (cons "\\b\\(\\<apply\\>\\)\\b" 'application)
+			  (cons "\\b\\(\\<partial\\>\\)\\b" 'partial-application)
 			  (cons "\\(#\\){" 'set)
 			  (cons "\\(#\\)(" 'f)))
 
@@ -48,6 +48,8 @@
 (package-require 'cider)
 (eval-after-load "clojure-mode" '(require 'cider))
 
+(setq cider-repl-use-clojure-font-lock t)
+(setq cider-font-lock-as-clojure t)
 (setq nrepl-hide-special-buffers t)
 (setq cider-repl-pop-to-buffer-on-connect nil)
 
@@ -61,18 +63,29 @@
   (interactive)
   (start-process "chrome" nil "chromium" "localhost:8080"))
 
+(defun define-keys (mode table)
+  (mapcar #'(lambda (pair) (let ((key (car pair))
+			    (f (cdr pair)))
+			(define-key mode key f)))
+	  table))
+
+(setq clojure-mode-keybindings (list (cons (kbd "C-c j") 'cider-jack-in)
+				     (cons (kbd "C-c b") 'spawn-chrome)))
+
 (add-hook 'clojure-mode-hook
-	  (lambda () (progn
-		  (define-key clojure-mode-map (kbd "C-c j") 'cider-jack-in)
-		  (define-key clojure-mode-map (kbd "C-c b") 'spawn-chrome))))
+	  (lambda () (define-keys clojure-mode-map clojure-mode-keybindings)))
+
+(setq cider-mode-keybindings (list (cons (kbd "C-c r") 'cider-restart)
+				   (cons (kbd "C-c n") 'cider-repl-set-ns)
+				   (cons (kbd "C-c z") 'cider-switch-to-relevant-repl-buffer)
+				   (cons (kbd "C-c <RET>") 'cider-eval-buffer)
+				   (cons (kbd "C-c <SPC>") 'cider-eval-defun-at-point-or-region)))
 
 (add-hook 'cider-mode-hook
 	  (lambda () (progn
 		  (cider-turn-on-eldoc-mode)
 		  (rebind-evil-tag-navigation cider-mode-map 'cider-jump 'cider-jump-back)
-		  (define-key cider-mode-map (kbd "C-c r") 'cider-restart)
-		  (define-key cider-mode-map (kbd "C-c <RET>") 'cider-eval-buffer)
-		  (define-key cider-mode-map (kbd "C-c <SPC>") 'cider-eval-defun-at-point-or-region))))
+		  (define-keys cider-mode-map cider-mode-keybindings))))
 
 (add-hook 'cider-repl-mode-hook 'paredit-mode)
 (add-hook 'cider-repl-mode-hook 'rainbow-mode)

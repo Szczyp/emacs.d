@@ -2,4 +2,6 @@
 
 (ido-mode)
 
+(package-require 'ag)
+
 (provide 'global)
