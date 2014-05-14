@@ -76,4 +76,4 @@
 (dolist (file packages)
   (require file))
 
-(shell)
+(eshell)
