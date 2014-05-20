@@ -35,6 +35,7 @@
 ;;; Clojure
 (package-require 'clojure-mode)
 (add-to-list 'auto-mode-alist '("\\.cljs?$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("\\.cljx?$" . clojure-mode))
 
 (substitute-unicode 'clojure-mode
 		    (list (cons "\\b\\(\\<fn\\>\\)\\b" 'lambda)
@@ -104,5 +105,8 @@ Display the results in a hyperlinked *compilation* buffer."
 
 ;; Cljsbuild
 (package-require 'cljsbuild-mode)
+(setq cljsbuild-verbose t)
+(setq cljsbuild-show-buffer-on-failure t)
+(setq cljsbuild-show-buffer-on-warnings t)
 
 (provide 'lisp)
