@@ -1,27 +1,11 @@
 ;;; complete.el -- Auto completion
 
-(package-require 'auto-complete)
-(require 'auto-complete-config)
-(ac-config-default)
-(add-to-list 'ac-dictionary-directories (concat dotfiles-dir "ac-dict"))
-(setq ac-auto-start t)
+(package-require 'company)
 
-;;; Clojure
-(package-require 'ac-nrepl)
-(require 'ac-nrepl)
-(add-hook 'cider-repl-mode-hook 'ac-nrepl-setup)
-(add-hook 'cider-mode-hook 'ac-nrepl-setup)
-(eval-after-load "auto-complete"
-  '(add-to-list 'ac-modes 'cider-repl-mode))
+(setq company-idle-delay 0.5)
+(setq company-tooltip-limit 10)
+(setq company-minimum-prefix-length 2)
 
-(defun set-auto-complete-as-completion-at-point-function ()
-  (setq completion-at-point-functions '(auto-complete)))
-(add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
-
-(add-hook 'cider-repl-mode-hook 'set-auto-complete-as-completion-at-point-function)
-(add-hook 'cider-mode-hook 'set-auto-complete-as-completion-at-point-function)
-
-(eval-after-load "cider"
-  '(define-key cider-mode-map (kbd "C-c d") 'ac-nrepl-popup-doc))
+(global-company-mode 1)
 
 (provide 'complete)
