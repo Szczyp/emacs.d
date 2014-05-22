@@ -43,6 +43,7 @@
 (make-conditional-key-translation (kbd "<SPC>") (kbd "C-c") 'translate-keys-p)
 (make-conditional-key-translation (kbd "C-<SPC>") (kbd "C-x") 'translate-keys-p)
 (make-conditional-key-translation (kbd "<RET>") (kbd "M-x") 'translate-keys-p)
+(make-conditional-key-translation (kbd "C-<return>") (kbd "M-X") 'translate-keys-p)
 
 ;; Add to mode hooks when rebinding these
 (defun rebind-evil-tag-navigation (map jump jump-back)
