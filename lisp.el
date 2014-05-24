@@ -60,10 +60,6 @@
       (cider-eval-region (region-beginning) (region-end))
     (cider-eval-defun-at-point)))
 
-(defun spawn-chrome ()
-  (interactive)
-  (start-process "chrome" nil "chromium" "localhost:8080"))
-
 (defun define-keys (mode table)
   (mapcar #'(lambda (pair) (let ((key (car pair))
 			    (f (cdr pair)))
@@ -102,6 +98,15 @@
 Display the results in a hyperlinked *compilation* buffer."
   (interactive)
   (compile "lein kibit"))
+
+(defun cljx ()
+  "Run lein cljx auto"
+  (interactive)
+  (async-shell-command "lein cljx auto" "*cljxbuild*"))
+
+(defun spawn-chrome ()
+  (interactive)
+  (start-process "chrome" nil "chromium" "localhost:8080"))
 
 ;; Cljsbuild
 (package-require 'cljsbuild-mode)
