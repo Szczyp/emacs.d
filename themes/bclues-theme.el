@@ -139,6 +139,9 @@
  `(flymake-warnline                    ((t (:underline "#009945" :background nil :inherit nil ))))
  ;; Magit hightlight
  `(magit-item-highlight                ((t (:foreground "white" :background "#0a335d" :inherit nil ))))
+ `(magit-section-title                 ((t (:forground "white" :background "#222232" :inherit nil))))
+ `(magit-diff-add                 ((t (:forground "white" :background "#009945" :inherit nil))))
+ `(magit-diff-del                 ((t (:forground "white" :background "#C74000" :inherit nil))))
  ;;git-gutter
  '(git-gutter:added                    ((t (:foreground "#609f60" :bold t))))
  '(git-gutter:modified                 ((t (:foreground "#3388cc" :bold t))))
@@ -146,8 +149,8 @@
  '(git-gutter-fr:added                    ((t (:foreground "#609f60" :bold t))))
  '(git-gutter-fr:modified                 ((t (:foreground "#3388cc" :bold t))))
  '(git-gutter-fr:deleted                  ((t (:foreground "#cc3333" :bold t))))
- '(diff-added                          ((t (:background "#132013"))))
- '(diff-removed                        ((t (:background "#290a0a"))))
+ '(diff-added                          ((t (:background "#009945"))))
+ '(diff-removed                        ((t (:background "#C74000"))))
  '(diff-file-header                    ((t (:background "#362145"))))
  '(diff-context                        ((t (:foreground "#E0E4CC"))))
  '(diff-hunk-header                    ((t (:background "#242130"))))

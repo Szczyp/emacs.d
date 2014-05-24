@@ -111,7 +111,7 @@
 
 (theme-dark)
 
-(set-frame-font "Envy Code R-13")
+(set-frame-font "FiraMono-12")
 
 ;; Unclutter the modeline
 (package-require 'diminish)
