@@ -72,11 +72,12 @@
 (add-hook 'clojure-mode-hook
 	  (lambda () (define-keys clojure-mode-map clojure-mode-keybindings)))
 
-(setq cider-mode-keybindings (list (cons (kbd "C-c r") 'cider-restart)
-				   (cons (kbd "C-c n") 'cider-repl-set-ns)
-				   (cons (kbd "C-c z") 'cider-switch-to-relevant-repl-buffer)
-				   (cons (kbd "C-c <RET>") 'cider-eval-buffer)
-				   (cons (kbd "C-c <SPC>") 'cider-eval-defun-at-point-or-region)))
+(setq cider-mode-keybindings
+      (list (cons (kbd "C-c r") 'cider-restart)
+	    (cons (kbd "C-c n") 'cider-repl-set-ns)
+	    (cons (kbd "C-c z") 'cider-switch-to-relevant-repl-buffer)
+	    (cons (kbd "C-c <RET>") 'cider-eval-buffer)
+	    (cons (kbd "C-c <SPC>") 'cider-eval-defun-at-point-or-region)))
 
 (add-hook 'cider-mode-hook
 	  (lambda () (progn
@@ -84,8 +85,14 @@
 		  (rebind-evil-tag-navigation cider-mode-map 'cider-jump 'cider-jump-back)
 		  (define-keys cider-mode-map cider-mode-keybindings))))
 
-(add-hook 'cider-repl-mode-hook 'paredit-mode)
-(add-hook 'cider-repl-mode-hook 'rainbow-mode)
+(setq cider-repl-mode-keybindings
+      (list (cons (kbd "C-c z") 'cider-switch-to-last-clojure-buffer)))
+
+(add-hook 'cider-repl-mode-hook
+	  (lambda () (progn
+		  (paredit-mode)
+		  (rainbow-mode)
+		  (define-keys cider-repl-mode-map cider-repl-mode-keybindings))))
 
 ;;Kibit
 (require 'compile)
