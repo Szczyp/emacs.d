@@ -15,7 +15,7 @@
 (package-require 'highlight-parentheses)
 (add-lisp-hook 'highlight-parentheses-mode)
 
-;;; Emacs Lisp
+;; Emacs Lisp
 (dolist (c (string-to-list ":_-?!#*"))
   (modify-syntax-entry c "w" emacs-lisp-mode-syntax-table))
 
@@ -35,11 +35,27 @@
 (add-hook 'emacs-lisp-mode-hook
 	  (lambda () (rebind-evil-tag-navigation emacs-lisp-mode-map 'find-function-at-point nil)))
 
-;;; Clojure
+;; Clojure
 (package-require 'clojure-mode)
 (add-to-list 'auto-mode-alist '("\\.cljs?$" . clojure-mode))
 (add-to-list 'auto-mode-alist '("\\.cljx?$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("\\.cljs.hl?$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("\\.boot?$" . clojure-mode))
 
+;; Monads
+(add-hook 'clojure-mode-hook
+	  '(lambda ()
+	     (progn
+	       (put-clojure-indent 'mlet 1)
+	       (put-clojure-indent 'mdo 0))))
+
+(font-lock-add-keywords
+ 'clojure-mode
+ '(("mlet" . font-lock-keyword-face)
+   ("mdo" . font-lock-keyword-face)
+   ("return" . font-lock-keyword-face)))
+
+;; Unicode
 (substitute-unicode 'clojure-mode
 		    (list (cons "\\b\\(\\<fn\\>\\)\\b" 'lambda)
 			  (cons "\\b\\(\\<comp\\>\\)\\b" 'composition)
