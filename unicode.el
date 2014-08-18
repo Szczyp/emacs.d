@@ -13,7 +13,8 @@
 			    (sym (unicode-symbol (cdr pair))))
 			(font-lock-add-keywords
 			 mode `((,pattern
-				 (0 (progn (compose-region (match-beginning 1) (match-end 1)
+				 (0 (progn (compose-region (match-beginning 1)
+							   (match-end 1)
 							   ,sym 'decompose-region))))))))
 	  table))
 

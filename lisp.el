@@ -16,6 +16,9 @@
 (add-lisp-hook 'highlight-parentheses-mode)
 
 ;;; Emacs Lisp
+(dolist (c (string-to-list ":_-?!#*"))
+  (modify-syntax-entry c "w" emacs-lisp-mode-syntax-table))
+
 (substitute-unicode 'emacs-lisp-mode
 		    (list (cons "(\\(\\<lambda\\>\\)" 'lambda)))
 
