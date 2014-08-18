@@ -122,7 +122,7 @@
  '(mode-line-emphasis                  ((t (                                             :weight bold                                  ))))
  '(mode-line-buffer-id                 ((t (                                             :box nil :weight bold                         ))))
  '(mode-line-inactive                  ((t (:foreground "#555555"  :background "#111111" :box nil :weight light :inherit (mode-line)   ))))
- '(mode-line                           ((t (:foreground "#99ccee"  :background "#222232" :font "FiraMono" :box nil :height 130 :inherit (variable-pitch) ))))
+ '(mode-line                           ((t (:foreground "#99ccee"  :background "#222232" :font "Input" :box nil :height 130 :inherit (variable-pitch) ))))
  '(isearch                             ((t (:foreground "#99ccee"  :background "#444444"                                               ))))
  '(isearch-fail                        ((t (                       :background "#ffaaaa"                                               ))))
  '(lazy-highlight                      ((t (                       :background "#77bbdd"                                               ))))

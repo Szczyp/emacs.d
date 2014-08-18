@@ -111,7 +111,7 @@
 
 (theme-dark)
 
-(set-frame-font "FiraMono-12")
+(set-frame-font "Input-14")
 
 ;; Unclutter the modeline
 (package-require 'diminish)
