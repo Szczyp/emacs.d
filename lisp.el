@@ -91,10 +91,18 @@
 (add-hook 'clojure-mode-hook
 	  (lambda () (define-keys clojure-mode-map clojure-mode-keybindings)))
 
+(defun reload ()
+  (interactive)
+  (evil-write-all nil)
+  (cider-interactive-eval "(require 'clojure.tools.namespace.repl)
+(clojure.tools.namespace.repl/refresh)"))
+
 (setq cider-mode-keybindings
-      (list (cons (kbd "C-c r") 'cider-restart)
+      (list (cons (kbd "C-c r") 'reload)
 	    (cons (kbd "C-c n") 'cider-repl-set-ns)
 	    (cons (kbd "C-c z") 'cider-switch-to-relevant-repl-buffer)
+	    (cons (kbd "C-c d") 'cider-doc)
+	    (cons (kbd "C-c a") 'cider-apropos)
 	    (cons (kbd "C-c <RET>") 'cider-eval-buffer)
 	    (cons (kbd "C-c <SPC>") 'cider-eval-defun-at-point-or-region)))
 
