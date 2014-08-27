@@ -113,7 +113,8 @@
 		  (define-keys cider-mode-map cider-mode-keybindings))))
 
 (setq cider-repl-mode-keybindings
-      (list (cons (kbd "C-c z") 'cider-switch-to-last-clojure-buffer)))
+      (list (cons (kbd "C-c z") 'cider-switch-to-last-clojure-buffer)
+	    (cons (kbd "C-c c") 'cider-repl-clear-buffer)))
 
 (add-hook 'cider-repl-mode-hook
 	  (lambda () (progn
