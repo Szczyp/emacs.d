@@ -52,7 +52,7 @@
   (define-key evil-motion-state-map (kbd "C-t") nil)
   (define-key map (kbd "C-t") jump-back))
 
-(package-require 'surround)
-(global-surround-mode 1)
+(package-require 'evil-surround)
+(global-evil-surround-mode 1)
 
 (provide 'vim)

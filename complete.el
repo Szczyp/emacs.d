@@ -2,7 +2,7 @@
 
 (package-require 'company)
 
-(setq company-idle-delay 0.5)
+(setq company-idle-delay 0.2)
 (setq company-tooltip-limit 10)
 (setq company-minimum-prefix-length 2)
 
