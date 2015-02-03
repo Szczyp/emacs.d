@@ -65,7 +65,7 @@
 	git
 	complete
 	lisp
-	haskell
+	hask
 	parens))
 
 ;; Now load other things
